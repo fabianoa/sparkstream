@@ -1,5 +1,7 @@
+//src/main/java=main
 //src/main/resources=main
 //src/main/scala=main
+//src/test/java=tests
 //src/test/resources=tests
 //src/test/scala=tests
 P=
@@ -34,7 +36,7 @@ optimise=false
 recompileOnMacroDef=true
 relationsDebug=false
 scala.compiler.additionalParams=\ -Xsource\:2.10 -Ymacro-expand\:none
-scala.compiler.installation=1262432225
+scala.compiler.installation=2.10
 scala.compiler.sourceLevel=2.10
 scala.compiler.useProjectSettings=true
 stopBuildOnError=true

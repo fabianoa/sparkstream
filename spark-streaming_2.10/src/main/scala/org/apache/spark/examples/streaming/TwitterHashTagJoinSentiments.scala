@@ -30,6 +30,14 @@ object TwitterHashTagJoinSentiments   extends Logging {
       Logger.getRootLogger.setLevel(Level.OFF)
     }
   }
+
+  def calculaValencia(listaDepalavras: Array[String], dicionario: Array[String], stopWords: Array[String]){
+    
+    
+    
+    
+  }
+  
   
  def main(args: Array[String]) {
     if (args.length < 4) {
@@ -54,9 +62,22 @@ object TwitterHashTagJoinSentiments   extends Logging {
     val ssc = new StreamingContext(sparkConf, Seconds(60))
     val stream = TwitterUtils.createStream(ssc, None, filters)
     val lanFilter = stream.filter(status => status.getUser.getLang == "pt")
-
-    val hashTags = lanFilter.flatMap(status => status.getText.split(" ").filter(_.startsWith("#")))
-
+    
+    val hashTags = lanFilter.flatMap(status => status.getText.toUpperCase().split(" "))
+      
+  
+    
+    // Read in the word-sentiment list and create a static RDD from it
+    val wordSentimentFilePath = "ANEW-br.txt"
+    
+    
+    val wordSentiments = ssc.sparkContext.textFile(wordSentimentFilePath).map { line =>
+      val Array(word, valencia,dpv,alerta,dpa) = line.split(";")
+      (word, valencia,dpv,alerta,dpa)
+    } cache()
+    
+  
+    
     val topCounts60 = hashTags.map((_, 1)).reduceByKeyAndWindow(_ + _, Seconds(120))
                      .map{case (topic, count) => (count, topic)}
                      .transform(_.sortByKey(false))
